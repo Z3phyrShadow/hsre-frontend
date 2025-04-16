@@ -1,13 +1,17 @@
 import Checkbox from "@/components/Checkbox";
 import CheckboxWithText from "@/components/CheckboxWithText";
+import Dropdown from "@/components/Dropdown";
 import HairstyleImage from "@/components/HairstyleImage";
+import InputText from "@/components/InputText";
+import InputTextArea from "@/components/InputTextArea";
+import LeafletMap from "@/components/LeafletMap";
 import Toggle from "@/components/Toggle";
 import Image from "next/image";
 
 export default function Home() {
-  const options = [
-    { value: "price.ascending", label: "Price ascending" },
-    { value: "price.descending", label: "Price descending" },
+  const optionsYesNo = [
+    { value: "no", label: "No" },
+    { value: "yes", label: "Yes" },
   ];
 
   return (
@@ -15,12 +19,12 @@ export default function Home() {
       {/* Section 1: Home page */}
       <section
         id="home"
-        className="flex items-center justify-center h-screen flex-col snap-start"
+        className="flex items-center justify-center h-screen flex-col gap-10 snap-start"
       >
-        <h1 className="text-4xl font-semibold">
+        <h1 className="text-4xl font-semibold text-[#1E1E1E]">
           Hairstyle Recommendation System
         </h1>
-        <button className="bg-[#2c2c2c] mt-10 py-4 px-15 text-xl text-white rounded-md">
+        <button className="bg-[#2c2c2c] py-4 px-16 text-xl text-[#F5F5F5] rounded-md">
           Try it out!
         </button>
       </section>
@@ -31,14 +35,13 @@ export default function Home() {
         className="flex items-center justify-center h-screen px-10 gap-10 snap-start"
       >
         {/* Camera Region */}
-        <div className="flex-1/2 h-[500px] bg-gray-300 relative flex items-center justify-center">
-          <div className="absolute z-10 flex gap-5 justify-between w-[500px]">
-            <button className="bg-green-500 border border-[#767676] py-3 flex-1 rounded-md text-white">
-              {" "}
+        <div className="flex-1/2 h-[500px] bg-[#E3E3E3] relative flex items-center justify-center">
+          {/* Camera Options Button */}
+          <div className="absolute z-10 flex gap-5 w-full">
+            <button className="bg-[#14AE5C] border border-[#444444] py-3 flex-1 rounded-md text-[#F5F5F5]">
               Open Camera
             </button>
-            <button className="bg-green-500 border border-[#767676] py-3 flex-1 rounded-md text-white">
-              {" "}
+            <button className="bg-[#14AE5C] border border-[#444444] py-3 flex-1 rounded-md text-[#F5F5F5]">
               Upload From Device
             </button>
           </div>
@@ -47,13 +50,13 @@ export default function Home() {
             alt="Camera Area"
             width={500}
             height={500}
-            className="mx-auto"
+            className="mx-auto opacity-20"
           ></Image>
         </div>
         {/* Photo Guide */}
-        <div className="flex-1/2 h-[500px]">
+        <div className="flex-1/2 h-[500px] text-[#1E1E1E]">
           <h1 className="pb-3 text-2xl">
-            <b>Give us a font-facing picture!</b>
+            <b>Give us a front-facing picture!</b>
           </h1>
           <ul className="list-disc list-inside space-y-0 pl-3">
             <li>Should be in a well environment.</li>
@@ -65,38 +68,24 @@ export default function Home() {
           </ul>
           {/* Profession and Special Occasion Form */}
           <div className="flex justify-between pt-5">
-            <div>
-              <label htmlFor="professional" className="block pb-2">
-                Professional?
-              </label>
-              <select
-                name="professional"
-                id="professional"
-                className="w-[240px] border-2 border-[#D9D9D9] rounded-md p-2 pr-8"
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-            </div>
-            <div>
-              <label htmlFor="occasion" className="block pb-2">
-                Special Occasion?
-              </label>
-              <select
-                name="occasion"
-                id="occasion"
-                className="w-[240px] border-2 border-[#D9D9D9] rounded-md p-2 pr-8"
-              >
-                <option value="No">No</option>
-                <option value="Yes">Yes</option>
-              </select>
-            </div>
+            <Dropdown
+              id="professional"
+              name="professional"
+              label="Professional?"
+              options={optionsYesNo}
+            />
+            <Dropdown
+              id="occasion"
+              name="occasion"
+              label="Special Occasion?"
+              options={optionsYesNo}
+            />
           </div>
-          <button className="bg-black w-full text-white my-5 p-2 rounded-lg">
+          <button className="bg-[#2C2C2C] w-full text-[#F5F5F5] my-5 p-2 rounded-lg">
             Generate
           </button>
           {/* Title Area */}
-          <div className="border border-[#D9D9D9] p-5">
+          <div className="border border-[#D9D9D9] p-5 rounded-md">
             <h3 className="font-semibold mb-2">Title</h3>
             <p>
               Answer the frequently asked question in a simple senence, a
@@ -251,54 +240,62 @@ export default function Home() {
         </div>
       </section>
 
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      {/* Section 4: Schedule Cut at Salons */}
+      <section
+        id="salon"
+        className="flex flex-col h-screen pt-5 px-10 gap-15 snap-start"
+      >
+        {/* Section Title */}
+        <div className="justify-center w-full text-4xl font-semibold mt-10 mx-6">
+          <h1>Schedule a cut at our partnered Salons!</h1>
+        </div>
+        {/* Contact Form Area */}
+        <div className="flex justify-center mx-15 h-2/3">
+          {/* Contact Form */}
+          <div className="p-5 flex-2/5 rounded-lg border border-[#D9D9D9]">
+            <form
+              action=""
+              method="post"
+              className="text-base text-[#1E1E1E] flex flex-col justify-between h-full"
+            >
+              <InputText
+                id="user.name"
+                name="user.name"
+                placeholder="Value"
+                label="Name"
+              />
+              <InputText
+                id="user.surname"
+                name="user.surname"
+                placeholder="Value"
+                label="Surname"
+              />
+              <InputText
+                id="user.email"
+                name="user.email"
+                placeholder="Value"
+                label="Email"
+              />
+              <InputTextArea
+                id="user.message"
+                name="user.message"
+                placeholder="Value"
+                label="Message"
+              />
+              <button
+                type="submit"
+                className="bg-[#2C2C2C] text-[#F5F5F5] rounded-md py-2.5"
+              >
+                Submit
+              </button>
+            </form>
+          </div>
+          {/* Map Area */}
+          <div className="flex-3/5 h-full">
+            <LeafletMap />
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
