@@ -1,3 +1,4 @@
+"use client";
 import Checkbox from "@/components/Checkbox";
 import CheckboxWithText from "@/components/CheckboxWithText";
 import Dropdown from "@/components/Dropdown";
@@ -24,7 +25,13 @@ export default function Home() {
         <h1 className="text-4xl font-semibold text-[#1E1E1E]">
           Hairstyle Recommendation System
         </h1>
-        <button className="bg-[#2c2c2c] py-4 px-16 text-xl text-[#F5F5F5] rounded-md">
+        <button
+          className="bg-[#2c2c2c] py-4 px-16 text-xl text-[#F5F5F5] rounded-md cursor-pointer"
+          onClick={() => {
+            const nextSection = document.querySelector("#camera");
+            nextSection?.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
           Try it out!
         </button>
       </section>
@@ -81,7 +88,11 @@ export default function Home() {
               options={optionsYesNo}
             />
           </div>
-          <button className="bg-[#2C2C2C] w-full text-[#F5F5F5] my-5 p-2 rounded-lg">
+          <button className="bg-[#2C2C2C] w-full text-[#F5F5F5] my-5 p-2 rounded-lg cursor-pointer" onClick={() => {
+            const nextSection = document.querySelector("#hairstyle");
+            nextSection?.scrollIntoView({ behavior: "smooth" });
+          }}
+        >
             Generate
           </button>
           {/* Title Area */}
@@ -261,33 +272,37 @@ export default function Home() {
               <InputText
                 id="user.name"
                 name="user.name"
-                placeholder="Value"
-                label="Name"
+                placeholder=""
+                label="First Name"
               />
               <InputText
                 id="user.surname"
                 name="user.surname"
-                placeholder="Value"
-                label="Surname"
+                placeholder=""
+                label="Last Name"
               />
               <InputText
                 id="user.email"
                 name="user.email"
-                placeholder="Value"
+                placeholder=""
                 label="Email"
               />
               <InputTextArea
                 id="user.message"
                 name="user.message"
-                placeholder="Value"
+                placeholder=""
                 label="Message"
               />
-              <button
+                <button
                 type="submit"
                 className="bg-[#2C2C2C] text-[#F5F5F5] rounded-md py-2.5"
-              >
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = "/thankyou";
+                }}
+                >
                 Submit
-              </button>
+                </button>
             </form>
           </div>
           {/* Map Area */}

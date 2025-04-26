@@ -11,7 +11,10 @@ interface HairstyleImageProps {
 
 export default function HairstyleImage(props: HairstyleImageProps) {
   return (
-    <div className="flex flex-col p-3 gap-2 border border-[#D9D9D9] rounded-md text-base">
+    <div className="flex flex-col p-3 gap-2 border border-[#D9D9D9] rounded-md text-base cursor-pointer" onClick={() => {
+      const nextSection = document.querySelector("#salon");
+      nextSection?.scrollIntoView({ behavior: "smooth" });
+    }}>
       <Image
         src={props.imageUrl}
         alt={props.imageAlt}
