@@ -3,6 +3,8 @@ interface CheckboxWithTextProps {
   name: string;
   label: string;
   text: string;
+  checked: boolean; // Added the 'checked' prop
+  onChange: (e: any) => void;
 }
 
 export default function CheckboxWithText(props: CheckboxWithTextProps) {

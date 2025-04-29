@@ -8,6 +8,7 @@ interface DropdownProps {
   name: string;
   label: string;
   options: DropdownOption[];
+  onChange?: (value: string) => void; 
 }
 
 export default function Dropdown(props: DropdownProps) {

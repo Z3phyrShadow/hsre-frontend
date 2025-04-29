@@ -9,7 +9,13 @@ import LeafletMap from "@/components/LeafletMap";
 import Toggle from "@/components/Toggle";
 import Image from "next/image";
 
+import { useState } from "react";
+
 export default function Home() {
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+  const [professional, setProfessional] = useState<boolean | null>(false);
+  const [occasion, setOccasion] = useState<boolean | null>(false);
   const optionsYesNo = [
     { value: "no", label: "No" },
     { value: "yes", label: "Yes" },
@@ -45,20 +51,44 @@ export default function Home() {
         <div className="flex-1/2 h-[500px] bg-[#E3E3E3] relative flex items-center justify-center">
           {/* Camera Options Button */}
           <div className="absolute z-10 flex gap-5 w-full">
-            <button className="bg-[#14AE5C] border border-[#444444] py-3 flex-1 rounded-md text-[#F5F5F5]">
-              Open Camera
-            </button>
-            <button className="bg-[#14AE5C] border border-[#444444] py-3 flex-1 rounded-md text-[#F5F5F5]">
+            {!uploadedImage && (
+              <button
+              className="bg-[#14AE5C] border border-[#444444] py-3 flex-1 rounded-md text-[#F5F5F5]"
+              onClick={() => document.getElementById("fileInput")?.click()}
+              >
               Upload From Device
-            </button>
+              </button>
+            )}
+            <input
+  type="file"
+  id="fileInput"
+  accept="image/*"
+  className="hidden"
+  onChange={(e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploadedFileName(file.name); // <-- Store file name here
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          setUploadedImage(event.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  }}
+/>
+
           </div>
           <Image
-            src="/image.png"
+            src={uploadedImage || "/image.png"}
             alt="Camera Area"
             width={500}
             height={500}
-            className="mx-auto opacity-20"
-          ></Image>
+            className={`mx-auto transition-opacity duration-300 ${
+              uploadedImage ? "opacity-100" : "opacity-20"
+            }`}
+          />
         </div>
         {/* Photo Guide */}
         <div className="flex-1/2 h-[500px] text-[#1E1E1E]">
@@ -74,20 +104,22 @@ export default function Home() {
             </li>
           </ul>
           {/* Profession and Special Occasion Form */}
-          <div className="flex justify-between pt-5">
+            <div className="flex justify-between pt-5">
             <Dropdown
               id="professional"
               name="professional"
               label="Professional?"
               options={optionsYesNo}
+              onChange={(value) => setProfessional(value === "yes" ? true : false)}
             />
             <Dropdown
               id="occasion"
               name="occasion"
               label="Special Occasion?"
               options={optionsYesNo}
+              onChange={(value) => setOccasion(value === "yes" ? true : false)}
             />
-          </div>
+            </div>
           <button className="bg-[#2C2C2C] w-full text-[#F5F5F5] my-5 p-2 rounded-lg cursor-pointer" onClick={() => {
             const nextSection = document.querySelector("#hairstyle");
             nextSection?.scrollIntoView({ behavior: "smooth" });
@@ -119,18 +151,22 @@ export default function Home() {
             <div className="mt-3">
               {/* Professional Option */}
               <CheckboxWithText
-                id="filter.professional"
-                name="filter.professional"
-                label="Professional"
-                text="For work stuff"
+              id="filter.professional"
+              name="filter.professional"
+              label="Professional"
+              text="For work stuff"
+              checked={professional || false}
+              onChange={(e) => setProfessional(e.target.checked)}
               />
 
               {/* Occasion Option */}
               <CheckboxWithText
-                id="filter.occasion"
-                name="filter.occasion"
-                label="Special Occasion"
-                text="For party stuff"
+              id="filter.occasion"
+              name="filter.occasion"
+              label="Special Occasion"
+              text="For party stuff"
+              checked={occasion || false}
+              onChange={(e) => setOccasion(e.target.checked)}
               />
             </div>
             {/* Price Slider */}
@@ -235,19 +271,32 @@ export default function Home() {
             </div>
           </div>
           {/* Hairstyle Image Grid */}
-          <div className="grid grid-cols-4 gap-4 py-8 overflow-y-auto no-scrollbar">
-            {Array.from({ length: 18 }).map((_, index) => (
-              <HairstyleImage
-                key={index}
-                imageUrl="/image.png"
-                imageAlt="Camera ALt"
-                imageWidth={200}
-                imageHeight={200}
-                label="Label"
-                price="0"
-              />
-            ))}
-          </div>
+            {uploadedImage && (
+                <div className="grid grid-cols-4 gap-4 py-8 overflow-y-auto no-scrollbar">
+                {(() => {
+                if (!uploadedImage || !uploadedFileName) return null;
+
+                const uploadedImageName = uploadedFileName.split(".")[0] || "default";
+                const imagePaths = Array.from({ length: 10 }, (_, i) => `${uploadedImageName}/${i + 1}.jpg`);
+
+                return imagePaths.map((imagePath, index) => {
+                const imageUrl = `/images/${imagePath}`;
+                const randomPrice = Math.floor(Math.random() * 10) * 10 + 10;
+                return (
+                  <HairstyleImage
+                  key={index}
+                  imageUrl={imageUrl}
+                  imageAlt={`Hairstyle ${index + 1}`}
+                  imageWidth={200}
+                  imageHeight={200}
+                  label={`Hairstyle ${index + 1}`}
+                  price={`${randomPrice}`}
+                  />
+                );
+                });
+                })()}
+                </div>
+            )}
         </div>
       </section>
 
@@ -295,7 +344,7 @@ export default function Home() {
               />
                 <button
                 type="submit"
-                className="bg-[#2C2C2C] text-[#F5F5F5] rounded-md py-2.5"
+                className="bg-[#2C2C2C] text-[#F5F5F5] rounded-md py-2.5 cursor-pointer"
                 onClick={(e) => {
                   e.preventDefault();
                   window.location.href = "/thankyou";
